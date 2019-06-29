@@ -11,7 +11,7 @@
 #
 # Happy Coding!
 
-service: air-room2be-to-api # NOTE: update this with your service name
+service: air-maxTemp-api # NOTE: update this with your service name
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -32,7 +32,7 @@ functions:
     handler: handler.air
     environment:
       BUCKET: sambot-air
-      ROOMS: studio,guest
+      ROOMS: studio,guest,livingroom,johann,bedroom
     tags: # Function specific tags
       project: sambot
       sambot: air

@@ -13,7 +13,7 @@ module.exports.air = async (event, context) => {
 
   let lowest = Number.POSITIVE_INFINITY;
   let highest = Number.NEGATIVE_INFINITY;
-  let tmp,coldroom,warmroom;
+  let tmpMax,tmpMin,coldroom,warmroom,tsMin,tsMax;
 
   for (let i=0;i<room.length;i++){
     let data = await s3.getObject({
@@ -24,25 +24,31 @@ module.exports.air = async (event, context) => {
   }
   console.log(roomdata);
   for (let i=roomdata.length-1; i>=0; i--) {
-    tmp = roomdata[i].temp;
-    if (tmp < lowest){
-      lowest = tmp;
+    tmpMax = roomdata[i].maxTemp;
+    tmpMin = roomdata[i].minTemp;
+    if (tmpMin < lowest){
+      lowest = tmpMin;
       coldroom = roomdata[i].room;
+      tsMin = roomdata[i].minTempTS;
+
     }
-    if (tmp > highest){
-      highest = tmp;
+    if (tmpMax > highest){
+      highest = tmpMax;
       warmroom = roomdata[i].room;
+      tsMax = roomdata[i].maxTempTS;
     }
   }
   console.log(highest, lowest);
   let obj = {
     coldest: {
       temp: lowest,
-      room: coldroom
+      room: coldroom,
+      date: tsMin
     },
     warmest: {
       temp: highest,
-      room: warmroom
+      room: warmroom,
+      date: tsMax
     }
   };
 
